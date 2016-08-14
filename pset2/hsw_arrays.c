@@ -2,7 +2,7 @@
 
 #define MAX 10
 
-int a;
+int a[10];
 int rand_seed=10;
 
 int rand()

@@ -2,7 +2,7 @@
 
 #define MAX 10
 
-int a[10];
+int a[MAX];
 int rand_seed=10;
 
 int rand()
@@ -23,10 +23,10 @@ int main()
 
   for (x=0; x < MAX-1; x++)
     for (y=0; y < MAX-x-1; y++)
-      if (a[i] > a[y+1])
+      if (a[y] > a[y+1])
       {
-        t = a[i];
-        a[i] = a[y+1];
+        t = a[y];
+        a[y] = a[y+1];
         a[y+1] = t;
       }
 

@@ -17,22 +17,22 @@ int main()
 
   for (i=0; i < MAX; i++)
   {
-    a=rand();
-    printf("%d\n", a);
+    a[i]=rand();
+    printf("%d\n", a[i]);
   }
 
   for (x=0; x < MAX-1; x++)
     for (y=0; y < MAX-x-1; y++)
-      if (a > a[y+1])
+      if (a[i] > a[y+1])
       {
-        t = a;
-        a = a[y+1];
+        t = a[i];
+        a[i] = a[y+1];
         a[y+1] = t;
       }
 
   printf("-------------------\n");
   for (i=0; i < MAX; i++)
-  printf("%d\n", a);
+  printf("%d\n", a[i]);
 
   return 0;
 }

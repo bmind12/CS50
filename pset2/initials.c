@@ -8,16 +8,22 @@ int abblen;
 int main()
 {
   string name = GetString();
-  char abb[strlen(name)];
-  abb[0] = name[0];
-  int a = 1;
+  abblen = strlen(name);
+  int a = 0;
 
-  for (int i = 1, sl = strlen(name); i < sl; i++) {
-    if (name[i-1] == ' ')
+  for (int i = 0, sl = strlen(name); i < sl; i++)
+    if (name[i-1] == ' ' || i == 0) a++;
+
+  char abb[a];
+  a = 0;
+
+  for (int i = 0, sl = strlen(name); i < sl; i++) {
+    if (name[i-1] == ' ' || i == 0)
     {
        abb[a] = name[i];
        a++;
     }
+
   }
   abblen = strlen(abb);
   printf("%s\n", capital(abb));

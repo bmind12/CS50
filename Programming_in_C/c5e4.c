@@ -33,7 +33,7 @@ int main(void) {
         printf("Operator is unknown\n");
     }
 
-    s > 0 ? printf("= %f\n", s) : printf("%f\n", s);
+    s > 0 ? printf("= %.2f\n", s) : printf("%2.f\n", s);
 
   } while (o != 'E');
 

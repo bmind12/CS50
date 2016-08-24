@@ -11,21 +11,37 @@
 
 #include "helpers.h"
 
+int mid(int n1, int n2);
+
 /**
  * Returns true if value is in array of n values, else false.
  */
 bool search(int value, int values[], int n)
 {
 
+    int s = 0, e = n;
+
     if (n < 0)
       return false;
 
-    for (int i = 0; i < n; ++i) {
-      if (values[i] == value)
+    do {
+      if (values[mid(s, e)] < value) {
+        e = mid(s, e) - 1;
+      }
+      else if (values[mid(s, e)] > value) {
+        s = mid(s, e) + 1;
+      }
+      else if (values[mid(s, e)] == value) {
         return true;
-    }
+      }
+    } while (s < e);
 
     return false;
+}
+
+int mid(int n1, int n2)
+{
+  return ( n1 + n2 ) / 2;
 }
 
 /**

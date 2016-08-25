@@ -36,12 +36,14 @@ int d;
 void clear(void);
 void greet(void);
 void init(int d);
-void draw(void);
+void draw(int int_to_display, bool nl);
 bool move(int tile);
 bool won(void);
 
 int main(int argc, string argv[])
 {
+    int ntd;
+
     // ensure proper usage
     if (argc != 2)
     {
@@ -57,6 +59,8 @@ int main(int argc, string argv[])
             DIM_MIN, DIM_MIN, DIM_MAX, DIM_MAX);
         return 2;
     }
+
+    int brd[d][d];
 
     // open log
     FILE* file = fopen("log.txt", "w");
@@ -78,7 +82,18 @@ int main(int argc, string argv[])
         clear();
 
         // draw the current state of the board
-        draw();
+        for (int x = 0; x < d; ++x) {
+
+          bool nl = true;
+
+          for (int y = 0; y < d; ++y) {
+
+            ntd = brd[x][y];
+            draw(ntd, nl);
+            nl = false;
+
+          }
+        }
 
         // log the current state of the board (for testing)
         for (int i = 0; i < d; i++)
@@ -159,8 +174,9 @@ void greet(void)
  */
 void init(int d)
 {
+
     int brd[d][d];
-    int count = d * d - 1;
+    int count = d * d;
     int temp;
 
     for (int x = 0; x < d; ++x) {
@@ -176,14 +192,22 @@ void init(int d)
     temp = brd[d-1][d-2];
     brd[d-1][d-2] = brd[d-1][d-3];
     brd[d-1][d-3] = temp;
+
 }
 
 /**
  * Prints the board in its current state.
  */
-void draw(void)
+void draw(int int_to_display, bool nl)
 {
-    // TODO
+
+  if (nl)
+    printf("\n");
+
+  if (int_to_display == 0)
+    printf("  _");
+  else
+    printf(" %2.i", int_to_display);
 }
 
 /**

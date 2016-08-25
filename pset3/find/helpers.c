@@ -19,22 +19,26 @@ int mid(int n1, int n2);
 bool search(int value, int values[], int n)
 {
 
-    int s = 0, e = n;
+    int s = 0, e = n - 1;
 
     if (n < 0)
       return false;
 
     do {
       if (values[mid(s, e)] < value) {
-        e = mid(s, e) - 1;
+        s = mid(s, e);
+        if (s == mid(s, e))
+          s = s + 1;
       }
       else if (values[mid(s, e)] > value) {
-        s = mid(s, e) + 1;
+        if (s == mid(s, e))
+          return false;
+        e = mid(s, e);
       }
       else if (values[mid(s, e)] == value) {
         return true;
       }
-    } while (s < e);
+    } while (s <= e);
 
     return false;
 }

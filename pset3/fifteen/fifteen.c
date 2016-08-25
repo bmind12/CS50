@@ -14,7 +14,7 @@
  * Note that usleep is obsolete, but it offers more granularity than
  * sleep and is simpler to use than nanosleep; `man usleep` for more.
  */
- 
+
 #define _XOPEN_SOURCE 500
 
 #include <cs50.h>
@@ -35,7 +35,7 @@ int d;
 // prototypes
 void clear(void);
 void greet(void);
-void init(void);
+void init(int d);
 void draw(void);
 bool move(int tile);
 bool won(void);
@@ -69,7 +69,7 @@ int main(int argc, string argv[])
     greet();
 
     // initialize the board
-    init();
+    init(d);
 
     // accept moves until game is won
     while (true)
@@ -105,7 +105,7 @@ int main(int argc, string argv[])
         // prompt for move
         printf("Tile to move: ");
         int tile = GetInt();
-        
+
         // quit if user inputs 0 (for testing)
         if (tile == 0)
         {
@@ -126,7 +126,7 @@ int main(int argc, string argv[])
         // sleep thread for animation's sake
         usleep(500000);
     }
-    
+
     // close log
     fclose(file);
 
@@ -155,11 +155,27 @@ void greet(void)
 
 /**
  * Initializes the game's board with tiles numbered 1 through d*d - 1
- * (i.e., fills 2D array with values but does not actually print them).  
+ * (i.e., fills 2D array with values but does not actually print them).
  */
-void init(void)
+void init(int d)
 {
-    // TODO
+    int brd[d][d];
+    int count = d * d - 1;
+    int temp;
+
+    for (int x = 0; x < d; ++x) {
+      for (int y = 0; y < d; ++y) {
+
+          brd[x][y] = count;
+          --count;
+
+      }
+    }
+
+    //swap 1 and 2
+    temp = brd[d-1][d-2];
+    brd[d-1][d-2] = brd[d-1][d-3];
+    brd[d-1][d-3] = temp;
 }
 
 /**
@@ -172,7 +188,7 @@ void draw(void)
 
 /**
  * If tile borders empty space, moves tile and returns true, else
- * returns false. 
+ * returns false.
  */
 bool move(int tile)
 {
@@ -181,7 +197,7 @@ bool move(int tile)
 }
 
 /**
- * Returns true if game is won (i.e., board is in winning configuration), 
+ * Returns true if game is won (i.e., board is in winning configuration),
  * else false.
  */
 bool won(void)

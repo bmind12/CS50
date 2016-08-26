@@ -61,6 +61,8 @@ int main(int argc, string argv[])
     }
 
     int brd[d][d];
+    int count = d * d - 1;
+    int temp;
 
     // open log
     FILE* file = fopen("log.txt", "w");
@@ -73,7 +75,21 @@ int main(int argc, string argv[])
     greet();
 
     // initialize the board
-    init(d);
+
+    for (int x = 0; x < d; ++x) {
+      for (int y = 0; y < d; ++y) {
+
+          brd[x][y] = count;
+          --count;
+      }
+    }
+
+    //swap 1 and 2
+    temp = brd[d-1][d-2];
+    brd[d-1][d-2] = brd[d-1][d-3];
+    brd[d-1][d-3] = temp;
+
+    // init(d);
 
     // accept moves until game is won
     while (true)
@@ -94,6 +110,8 @@ int main(int argc, string argv[])
 
           }
         }
+
+        printf("\n\n");
 
         // log the current state of the board (for testing)
         for (int i = 0; i < d; i++)
@@ -172,28 +190,10 @@ void greet(void)
  * Initializes the game's board with tiles numbered 1 through d*d - 1
  * (i.e., fills 2D array with values but does not actually print them).
  */
-void init(int d)
-{
-
-    int brd[d][d];
-    int count = d * d;
-    int temp;
-
-    for (int x = 0; x < d; ++x) {
-      for (int y = 0; y < d; ++y) {
-
-          brd[x][y] = count;
-          --count;
-
-      }
-    }
-
-    //swap 1 and 2
-    temp = brd[d-1][d-2];
-    brd[d-1][d-2] = brd[d-1][d-3];
-    brd[d-1][d-3] = temp;
-
-}
+// void init(int d)
+// {
+//
+// }
 
 /**
  * Prints the board in its current state.

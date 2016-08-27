@@ -32,6 +32,9 @@ int board[DIM_MAX][DIM_MAX];
 // dimensions
 int d;
 
+// null position
+int nul_p[2]
+
 // prototypes
 void clear(void);
 void greet(void);

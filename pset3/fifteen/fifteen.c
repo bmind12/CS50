@@ -35,10 +35,11 @@ int d;
 // prototypes
 void clear(void);
 void greet(void);
-void init(int d, int max_num);
-void draw(int d);
-bool move(int tile);
-bool won(int d, int max_num);
+void init(int max_num);
+void draw(void);
+bool move(int tile, int nul_p[]);
+bool won(int max_num);
+int abs(int n);
 
 int main(int argc, string argv[])
 {
@@ -59,6 +60,7 @@ int main(int argc, string argv[])
     }
 
     int const max_num = d * d - 1;
+    int nul_p[2] = {d - 1, d - 1};  // null position
 
     // open log
     FILE* file = fopen("log.txt", "w");
@@ -71,7 +73,7 @@ int main(int argc, string argv[])
     greet();
 
     // initialize the board
-    init(d, max_num);
+    init(max_num);
 
     // accept moves until game is won
     while (true)
@@ -80,7 +82,7 @@ int main(int argc, string argv[])
         clear();
 
         // draw the current state of the board
-        draw(d);
+        draw();
 
         // log the current state of the board (for testing)
         for (int i = 0; i < d; i++)
@@ -98,7 +100,7 @@ int main(int argc, string argv[])
         fflush(file);
 
         // check for win
-        if (won(d, max_num))
+        if (won(max_num))
         {
             printf("ftw!\n");
             break;
@@ -119,14 +121,14 @@ int main(int argc, string argv[])
         fflush(file);
 
         // move if possible, else report illegality
-        if (!move(tile))
+        if (!move(tile, nul_p))
         {
             printf("\nIllegal move.\n");
-            usleep(500000);
+            usleep(100000);
         }
 
         // sleep thread for animation's sake
-        usleep(500000);
+        usleep(100000);
     }
 
     // close log
@@ -159,7 +161,7 @@ void greet(void)
  * Initializes the game's board with tiles numbered 1 through d*d - 1
  * (i.e., fills 2D array with values but does not actually print them).
  */
-void init(int d, int max_num)
+void init(int max_num)
 {
   int count = max_num;
   int temp;
@@ -183,7 +185,7 @@ void init(int d, int max_num)
 /**
  * Prints the board in its current state.
  */
-void draw(int d)
+void draw(void)
 {
   for (int x = 0; x < d; ++x)
   {
@@ -203,62 +205,51 @@ void draw(int d)
  * If tile borders empty space, moves tile and returns true, else
  * returns false.
  */
-bool move(int tile)
+bool move(int tile, int nul_p[])
 {
-
-  if (!move(tile))
-  {
-      printf("\nIllegal move.\n");
-      usleep(100000);
-  }
-  else
-  {
-    bool found = false;
-    for (int x = 0; x < d && !found; ++x)
-      for (int y = 0; y < d && !found; ++y)
+  for (int x = 0; x < d; ++x)
+    for (int y = 0; y < d; ++y)
+      {
+        if (board[x][y] == tile)
         {
-          if (brd[x][y] == tile)
+          if ( ( x == nul_p[0] && abs( y - nul_p[1] ) == 1 ) ||
+            ( y == nul_p[1] && abs( x - nul_p[0] ) == 1 ) )
           {
-            found = true;
-            if ( ( x == nul_p[0] && abs( y - nul_p[1] ) == 1 ) ||
-              ( y == nul_p[1] && abs( x - nul_p[0] ) == 1 ) )
-            {
-              brd[nul_p[0]][nul_p[1]] = brd[x][y];
-              brd[x][y] = 0;
-              nul_p[0] = x;
-              nul_p[1] = y;
-              usleep(100000);
-            }
-            else
-            {
-              printf("\nIllegal move.\n");
-              usleep(100000);
-            }
-            break;
-          }
-      }
-  }
+            board[nul_p[0]][nul_p[1]] = board[x][y];
+            board[x][y] = 0;
+            nul_p[0] = x;
+            nul_p[1] = y;
+            usleep(100000);
+            return true;
+          };
+        }
+    }
 
-    if (tile > d * d - 1 || tile < 1)
-      return false;
-
-    return true;
-
-    return false;
+  return false;
 }
 
 /**
  * Returns true if game is won (i.e., board is in winning configuration),
  * else false.
  */
-bool won(int d, int max_num)
+bool won(int max_num)
 {
   int won_count = 1;
 
   for (int x = 0; x < d; ++x)
     for (int y = 0; y < d; ++y, ++won_count)
-      if (won_count != board[x][y])
+      if (won_count != board[x][y] && board[x][y] != board[d-1][d-1])
         return false;
 
-    return true;
+  return true;
+}
+
+/**
+  * Returns absolute value of an integer
+**/
+int abs(int n)
+{
+  if (n < 0)
+    n *= -1;
+  return n;
 }

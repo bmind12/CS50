@@ -1,19 +1,29 @@
-0.  TODO
-1.  TODO
-2.  TODO
-3.  TODO
-4.  TODO
-5.  TODO
-6.  TODO
-7.  TODO
-8.  TODO
-9.  TODO
-10. TODO
-11. TODO
-12. TODO
-13. TODO
-14. TODO
-15. TODO
-16. TODO
-17. TODO
+0.  Done.
+1.  Done.
+2.  Done.
+3.  Done.
+4.  Done.
+5.  Done.
+6.  stdint.h is a library with int(s) of predefined sized, which are used in
+    bmp.h, where we declare structures with such predefined int(s)
+7.  Because these int(s) have predefined size so we may store it in the
+    structure and accurately stream through the BMP files, pointing to right
+    properties of the BMP file.
+8.  BYTE = 1 byte; DWORD = 4 bytes; LING = 4 bytes; WORD = 2 bytes.
+9.  The header field used to identify the BMP and DIB file is 0x42 0x4D in
+    hexadecimal, same as BM in ASCII.
+10. bfSize represents the size of the BMP file in bytes. biSize represents
+    size of the raw bitmap data (including padding).
+11. Negative biHeight means that image is mirrored upside down.
+12. biBitCount.
+13. Because search permission is denied on a component of the path prefix,
+    or the file exists and the permissions specified by mode are denied, or
+    the file does not exist and write permission is denied for the parent
+    directory of the file to be created.
+14. Because we are already in a stream and we do not want to offset the stream.
+15. 3.
+16. fseek "moves the stream" of output file to skip a padding which is added in
+    the following block of code.
+17. SEEK_CUR is a third argument of fseek function which tells the stream to
+    shift a number in second argument from current position.
 18. TODO

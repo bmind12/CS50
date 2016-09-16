@@ -12,8 +12,8 @@
 8.  BYTE = 1 byte; DWORD = 4 bytes; LING = 4 bytes; WORD = 2 bytes.
 9.  The header field used to identify the BMP and DIB file is 0x42 0x4D in
     hexadecimal, same as BM in ASCII.
-10. bfSize represents the size of the BMP file in bytes. biSize represents
-    size of the raw bitmap data (including padding).
+10. bfSize is part of BITMAPFILEHEADER represents the size of the BMP file in bytes. biSize represents
+    the size of BITMAPINFOHEADER header (40 bytes).
 11. Negative biHeight means that image is mirrored upside down.
 12. biBitCount.
 13. Because search permission is denied on a component of the path prefix,

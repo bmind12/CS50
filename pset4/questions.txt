@@ -20,10 +20,11 @@
     or the file exists and the permissions specified by mode are denied, or
     the file does not exist and write permission is denied for the parent
     directory of the file to be created.
-14. Because we are already in a stream and we do not want to offset the stream.
+14. Because it says that we want to read only one element of size of the
+    previous argument.
 15. 3.
 16. fseek "moves the stream" of output file to skip a padding which is added in
     the following block of code.
 17. SEEK_CUR is a third argument of fseek function which tells the stream to
     shift a number in second argument from current position.
-18. TODO
+18. A smiling man with a tie.

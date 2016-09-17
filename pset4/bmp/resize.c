@@ -79,8 +79,10 @@ int main(int argc, char* argv[])
     // updating info for outfile
     bi.biWidth = width * factor;
     bi.biHeight = height * factor;
-    bf.bfSize = (14 + 40) + ((bi.biWidth * abs(bi.biHeight)) * 3);
-    // bi.biSize = (bi.biWidth * abs(bi.biHeight)) * 3;
+    bf.bfSize = (14 + 40) + (bi.biWidth * abs(bi.biHeight)) * 3 + \
+      paddingOut * abs(bi.biHeight);
+    bi.biSizeImage = (bi.biWidth * abs(bi.biHeight)) * 3 + \
+      paddingOut * abs(bi.biHeight);
 
     // write outfile's BITMAPFILEHEADER
     fwrite(&bf, sizeof(BITMAPFILEHEADER), 1, outptr);

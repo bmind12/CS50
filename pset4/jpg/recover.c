@@ -15,18 +15,14 @@ typedef struct
     unsigned int f2:8;
     unsigned int f3:8;
     unsigned int f4:8;
-    unsigned int fn;
+    unsigned int frest;
 } __attribute__((__packed__))
 BLOCK;
 
 int main(void)
 {
-    // remember filenames
     char* card = "card.raw";
-
-    // creating buffer
-    // char buffer[512];
-    char* title;
+    char title[8];
 
     // files counter
     int counter = 0;
@@ -39,10 +35,22 @@ int main(void)
         return 2;
     }
 
-    while(!feof(cardptr) && counter < 10)
-    {
-      // fread(&title, 512, 1, inptr);
+    BLOCK bl;
 
+    do
+    {
+        // (bl.f1 != 0xff && bl.f2 != 0xd8 && bl.f3 != 0xff && (bl.f4 < 0xe0 || bl.f4 > 0xef));
+        fread(&bl, 512, 1, cardptr);
+        printf("%ld\n", ftell(cardptr));
+
+        // come back before a start block
+
+    } while (fread(&bl, 512, 1, cardptr) != 1);
+
+    // fread(&buffer, 1, 512, cardptr);
+
+    while(counter < 2)
+    {
       // creating a new jpg file
       sprintf(title, "%03d.jpg", counter);
       FILE* img = fopen(title, "a");
@@ -50,17 +58,18 @@ int main(void)
       if (img == NULL)
       {
           fclose(img);
-          fprintf(stderr, "Could not create %s.\n", img);
+          fprintf(stderr, "Could not create %s.\n", title);
           return 3;
       }
 
       fclose(img);
 
-      // printf("%d: ", counter);
-      // printf("%#x, %#x, %#x, %#x, %#x\n", read[0], read[1], read[2], read[3], read[4]);
       counter++;
     }
 
     fclose(cardptr);
+    free(bl);
+
+    return 0;
     // FILE* outptr = fopen(title, "r");
 }

@@ -1,10 +1,46 @@
-0.  TODO
-1.  TODO
-2.  TODO
-3.  TODO
-4.  TODO
-5.  TODO
-6.  TODO
+0.  An artificial long word said to mean a lung disease caused by inhaling very fine ash and sand dust.
+1.  Rusage returns resource usage measures for:
+    a) the calling process and all its threads
+    b) only children of calling process
+    c) the calling thread
+2.  16 variables
+3.  There is no point in creation of a copy of a structure of 16 variables and
+    not even using all of them. I believe it will make the process faster and
+    uses less RAM.
+4.  First in includes all the needed libraries (including such as sys/time and
+    sys/resource). Then it includes "dictionary.h" library which I would need
+    to fill with working functions. It undefines variables calculate and
+    getrusage to make sure no values are stored in there. It defines global
+    dictionary variable dictionary linking it to one of the dictionaries. It
+    creates a prototype of calculate function which is following main function.
+    Then main function starts. It first checks accuracy of function's usage.
+    Declares structs and doubles for time calculations. Declares a dictionary
+    if it has been passed. Running and calculating the time spent for function
+    of dictionary's loading. Check if the function worked. Defines, opens and
+    checks opening of a file with the text. Declares following variables for
+    work with speller such as index of a word's characters, no. of misspellings
+    and no. of words. Declares an array of chars limited to maximum length - 45
+    plus 1 to fit '\0 char'. Runs through the text file till the end of the
+    file. If character is alphabetical it takes a char and starts building a
+    word. If word is bigger than max length it stops and limits it. If the loop
+    faces digit within a word it reads the word till the end and refreshes the
+    index value (=0). If it faces end of the word character '\' - it goes to
+    another else if and finishes a word with '\0' char in the array. Increases
+    words variable by 1 and checks spelling of the word (calculating also time
+    spent for the checking) and increasing the misspelling variable by 1 if
+    check returns false. After that index is zeroed for a new word. Then the
+    program checks for and error in the text file (if so - closes it and
+    returns a note). Then closes the file, determines dictionary's size and
+    calculates time of this function. Unloads the dictionary (calculating time
+    spent on it). If dictionary is not unloaded throws an error. Reports about
+    words in dictionary, words in text and times spent for each of the
+    functions and all together. Returns 0. Then there is a function which
+    calculates the time.
+5.  Because it's easier to go word by word and doing all manipulations with
+    each of them rather that copying everything and then trying to break it
+    into words. getc also allows to go char by char checking if there is no
+    number within the word.
+6.  Because these constants should not change!
 7.  TODO
 8.  TODO
 9.  TODO

@@ -11,6 +11,15 @@
 
 #include "dictionary.h"
 
+typedef struct node
+{
+  bool is_word;
+  struct _trie* paths[27];
+}
+node;
+
+node* root;
+
 /**
  * Returns true if word is in dictionary else false.
  */
@@ -25,7 +34,7 @@ bool check(const char* word)
  */
 bool load(const char* dictionary)
 {
-    // TODO
+    
     return false;
 }
 
@@ -45,4 +54,22 @@ bool unload(void)
 {
     // TODO
     return false;
+}
+
+/**
+ * Lowercases each word's letter
+ */
+char* lower(const char* word)
+{
+  // Declare a word pointer
+  char* lword = word;
+
+  // Looping through the word makeing capitals to be lowercase
+  for (int i, word[i] != '/0', ++i)
+  {
+    if (word[i] > 'A' && word[i] < 'Z')
+      word[i] =+ 32;
+  }
+
+  return  lwrod;
 }

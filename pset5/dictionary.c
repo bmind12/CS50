@@ -50,6 +50,9 @@ bool load(const char* dictionary)
         return false;
     }
 
+    // Root pointer to initial structure
+    root = (node*) calloc(sizeof node);
+
     // Scanning the dictionary
     for (int c = fgetc(fd); c != EOF; c = fgetc(fd))
     {
@@ -60,7 +63,8 @@ bool load(const char* dictionary)
         }
         else
         {
-            node = calloc(sizeof node)
+            if (node)
+            node = (node*) calloc(sizeof node)
             index = 0
         }
     }

@@ -11,6 +11,8 @@
 
 #include "dictionary.h"
 
+char* lower(const char* word)
+
 typedef struct node
 {
   bool is_word;
@@ -34,7 +36,35 @@ bool check(const char* word)
  */
 bool load(const char* dictionary)
 {
-    
+    char word[LENGTH+1];
+    int index = 0;
+
+    // Openning the dictionary
+    FILE* fd = fopen(dictionary, 'r');
+
+    // Check if could not open
+    if (fd == NULL)
+    {
+        printf("Could not open %s.\n", dictionary);
+        unload();
+        return false;
+    }
+
+    // Scanning the dictionary
+    for (int c = fgetc(fd); c != EOF; c = fgetc(fd))
+    {
+        if (c != '\n')
+        {
+            word[index] = c;
+            index++;
+        }
+        else
+        {
+            node = calloc(sizeof node)
+            index = 0
+        }
+    }
+
     return false;
 }
 

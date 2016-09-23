@@ -29,7 +29,7 @@ int main(void)
         return false;
     }
 
-    // Root pointer to initial structure
+    // Root pointer to initial structure 
     root = (node*) malloc(sizeof(node));
 
     // Scanning the dictionary

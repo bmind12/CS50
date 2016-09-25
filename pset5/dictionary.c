@@ -16,6 +16,7 @@
 
 int CHARTONUM = 97;
 int MAXPATHS = 27;
+int WORDSNUM = 0;
 
 typedef struct node
 {
@@ -111,18 +112,25 @@ bool load(const char* dictionary)
                         return false;
                     }
 
-                    // Moving crawler deeper to another struct
+                    // Moving crawler deeper to a newly created struct
                     crawler->paths[j] = new_node;
+                    crawler = crawler->paths[j];
+                    for (int i = 0; i < MAXPATHS; i++)
+                      crawler->paths[i] = NULL;
+                }
+                else
+                {
+                  // Moving crawler deeper to another struct
+                  crawler = crawler->paths[j];
                 }
 
-                // Moving crawler deeper to another struct
-                crawler = crawler->paths[j];
-                for (int i = 0; i < MAXPATHS; i++)
-                  crawler->paths[i] = NULL;
             }
 
-            // Indicating the end of a word
+            /*  Indicating the end of a word, counting words and
+                coming back to root */
             crawler->is_word = true;
+            WORDSNUM++;
+            crawler = root;
             index = 0;
         }
     }
@@ -136,7 +144,7 @@ bool load(const char* dictionary)
  */
 unsigned int size(void)
 {
-    return 0;
+    return WORDSNUM;
 }
 
 /**
@@ -160,7 +168,7 @@ char* lower(char* word)
     // Looping through the word makeing capitals to be lowercase
     for (int i = 0; i < len; i++)
     {
-    if (word[i] > 'A' && word[i] < 'Z')
+    if (word[i] >= 'A' && word[i] <= 'Z')
       word[i] += 32;
     }
 
@@ -182,7 +190,7 @@ void free_trie(node* crawler)
             child = crawler->paths[i];
             free_trie(child);
         }
-        else
+        else if (i == MAXPATHS)
         {
             free(crawler);
             return;

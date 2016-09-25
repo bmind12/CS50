@@ -27,7 +27,7 @@ node;
 
 node* root;
 
-char* lower(char* word);
+char lower(char c);
 void free_trie(node* crawler);
 
 /**
@@ -35,8 +35,34 @@ void free_trie(node* crawler);
  */
 bool check(const char* word)
 {
-    // TODO
-    return false;
+    // Converting to lowercase
+    int len = strlen(word);
+    char lchar;
+
+    // Defining and linking a crawler
+    node* crawler = root;
+
+    for (int i = 0, j = 0; i < len; i++)
+    {
+        lchar = lower(word[i]);
+
+        // Determining char's index
+        j = (lchar != '\'') ? (lchar - CHARTONUM) : MAXPATHS;
+
+        // Continiously digging into structure if door is closed -> return false
+        if (crawler->paths[j] == NULL)
+        {
+            return false;
+        }
+        else
+        {
+            // Moving crawler deeper to another struct
+            crawler = crawler->paths[j];
+        }
+    }
+
+    return (crawler->is_word == true) ? true : false;
+
 }
 
 /**
@@ -44,7 +70,6 @@ bool check(const char* word)
  */
 bool load(const char* dictionary)
 {
-    char cchar;
     char word[LENGTH+1];
     int j = 0;
     int index = 0;
@@ -93,10 +118,8 @@ bool load(const char* dictionary)
         {
             for (int i = 0; i < index; i++)
             {
-                cchar = word[i];
-
                 // Determining char's index
-                j = (cchar != '\'') ? (cchar - CHARTONUM) : MAXPATHS;
+                j = (word[i] != '\'') ? (word[i] - CHARTONUM) : MAXPATHS;
 
                 /*  Checking if crawler has reached the end and
                     creating a new node if needed */
@@ -160,19 +183,9 @@ bool unload(void)
 /**
  * Lowercases each word's letter
  */
-char* lower(char* word)
+char lower(char c)
 {
-    // Defining lenght of a word
-    int len = strlen(word);
-
-    // Looping through the word makeing capitals to be lowercase
-    for (int i = 0; i < len; i++)
-    {
-    if (word[i] >= 'A' && word[i] <= 'Z')
-      word[i] += 32;
-    }
-
-    return word;
+    return (c >= 'A' && c <= 'Z') ? c += 32 : c;
 }
 
 /**

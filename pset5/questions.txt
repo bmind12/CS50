@@ -41,7 +41,12 @@
     into words. getc also allows to go char by char checking if there is no
     number within the word.
 6.  Because these constants should not change!
-7.  TODO
-8.  TODO
-9.  TODO
+7.  I have tries structures. I used them because they are more straightforward
+    in terms of structure and I believe they work faster than hash structures
+    (at least for that scenario). Each trie represents a structure of boolean
+    value and array of 27 pointers to other nodes which I NULLed every time
+    after creation.
+8.  Load and unload was "only"(?) 5 times slower than staffs but still pretty
+    fast.
+9.  Not yet, seems pretty fast to me.
 10. TODO

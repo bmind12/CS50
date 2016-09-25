@@ -47,7 +47,7 @@ bool check(const char* word)
         lchar = lower(word[i]);
 
         // Determining char's index
-        j = (lchar != '\'') ? (lchar - CHARTONUM) : MAXPATHS;
+        j = (lchar != '\'') ? (lchar - CHARTONUM) : MAXPATHS - 1;
 
         // Continiously digging into structure if door is closed -> return false
         if (crawler->paths[j] == NULL)
@@ -62,7 +62,6 @@ bool check(const char* word)
     }
 
     return (crawler->is_word == true) ? true : false;
-
 }
 
 /**
@@ -73,7 +72,6 @@ bool load(const char* dictionary)
     char word[LENGTH+1];
     int j = 0;
     int index = 0;
-
 
     // Openning the dictionary
     FILE* fd = fopen(dictionary, "r");
@@ -100,7 +98,10 @@ bool load(const char* dictionary)
 
     // NULLing array
     for (int i = 0; i < MAXPATHS; i++)
-      root->paths[i] = NULL;
+    {
+        root->paths[i] = NULL;
+    }
+    root->is_word = false;
 
     // Defining and linking a crawler
     node* crawler = root;
@@ -119,7 +120,7 @@ bool load(const char* dictionary)
             for (int i = 0; i < index; i++)
             {
                 // Determining char's index
-                j = (word[i] != '\'') ? (word[i] - CHARTONUM) : MAXPATHS;
+                j = (word[i] != '\'') ? (word[i] - CHARTONUM) : MAXPATHS - 1;
 
                 /*  Checking if crawler has reached the end and
                     creating a new node if needed */
@@ -139,12 +140,15 @@ bool load(const char* dictionary)
                     crawler->paths[j] = new_node;
                     crawler = crawler->paths[j];
                     for (int i = 0; i < MAXPATHS; i++)
-                      crawler->paths[i] = NULL;
+                    {
+                        crawler->paths[i] = NULL;
+                    }
+                    crawler->is_word = false;
                 }
                 else
                 {
-                  // Moving crawler deeper to another struct
-                  crawler = crawler->paths[j];
+                    // Moving crawler deeper to another struct
+                    crawler = crawler->paths[j];
                 }
 
             }
@@ -193,20 +197,14 @@ char lower(char c)
  */
 void free_trie(node* crawler)
 {
-    node* child;
-
     // Looping thriygh each pointer to a struct and freeing once reached the end
-    for (int i = 0; i < MAXPATHS + 1; i++)
+    for (int i = 0; i < MAXPATHS; i++)
     {
         if (crawler->paths[i] != NULL)
-        {
-            child = crawler->paths[i];
-            free_trie(child);
-        }
-        else if (i == MAXPATHS)
-        {
-            free(crawler);
-            return;
-        }
+            free_trie(crawler->paths[i]);
     }
+
+    free(crawler);
+    return;
+
 }

@@ -1,4 +1,5 @@
-0.  An artificial long word said to mean a lung disease caused by inhaling very fine ash and sand dust.
+0.  An artificial long word said to mean a lung disease caused by inhaling very
+    fine ash and sand dust.
 1.  Rusage returns resource usage measures for:
     a) the calling process and all its threads
     b) only children of calling process
@@ -48,5 +49,6 @@
     after creation.
 8.  Load and unload was "only"(?) 5 times slower than staffs but still pretty
     fast.
-9.  Not yet, seems pretty fast to me.
-10. TODO
+9.  I didn't change the algorithm itself, but I tried to clean the code, remove
+    variables there possible.
+10. I don't think so.

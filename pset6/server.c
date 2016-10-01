@@ -618,12 +618,13 @@ bool load(FILE* file, BYTE** content, size_t* length)
  */
 const char* lookup(const char* path)
 {
-    char* dest;
+    char dest[5];
+    int dot = 46;
 
-    for (int i = 0, j = 0; quote[i] != '\0'; i++)
+    for (int i = 0; path[i] != '\0'; i++)
     {
-        if (path[i] = ".")
-            strcpy(dest, path[i])
+        if (path[i] == dot)
+            strcpy(dest, &path[i]);
     }
 
     if (strcasecmp(dest, ".css") == 0)
@@ -655,23 +656,71 @@ const char* lookup(const char* path)
 }
 
 /**
- * Lowercases each word's letter
- */
-char lower(char c)
-{
-    return (c >= 'A' && c <= 'Z') ? c += 32 : c;
-}
-
-/**
  * Parses a request-line, storing its absolute-path at abs_path
  * and its query string at query, both of which are assumed
  * to be at least of length LimitRequestLine + 1.
  */
 bool parse(const char* line, char* abs_path, char* query)
 {
-    // TODO
-    error(501);
-    return false;
+    char method[LimitRequestLine + 1];
+    char HTTP_version[LimitRequestLine + 1];
+    char request_target[LimitRequestLine + 1];
+    int finds[2], findq = 0;
+    int space = 32, bslash = 47, dquotes = 34, qmark = 63;
+
+    for (int i = 0, j = 0; i < strlen(line); i++)
+    {
+        if (line[i - 1] == space)
+        {
+            finds[j] = i;
+            j++;
+        }
+        else if (line[i - 1] == qmark)
+        {
+            findq = i;
+        }
+    }
+
+    strncpy (method, line, finds[0] - 1);
+    strncpy (request_target, &line[finds[0]], finds[1] - finds[0] - 1);
+    strncpy (HTTP_version, &line[finds[1]], strlen(line) - finds[1] - 2);
+
+    if (strcmp(method, "GET") != 0)
+    {
+        error(405);
+        return false;
+    }
+
+    if (request_target[0] != bslash)
+    {
+        error(501);
+        return false;
+    }
+
+    if (strchr(request_target, dquotes) != NULL)
+    {
+        error(400);
+        return false;
+    }
+
+    if (strcmp(HTTP_version, "HTTP/1.1") != 0)
+    {
+        error(505);
+        return false;
+    }
+
+    if (findq == 0)
+    {
+        strncpy (query, "", 1);
+        strncpy (abs_path, request_target, finds[1] - finds[0] - 1);
+    }
+    else
+    {
+        strncpy (query, &line[findq], finds[1] - findq - 1);
+        strncpy (abs_path, &line[finds[0]], findq - finds[0] - 1);
+    }
+
+    return true;
 }
 
 /**

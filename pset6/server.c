@@ -444,8 +444,36 @@ char* htmlspecialchars(const char* s)
  */
 char* indexes(const char* path)
 {
-    // TODO
-    return NULL;
+    char* index_php;
+    char* index_html;
+
+    index_php = malloc(LimitRequestLine + 1);
+    index_html = malloc(LimitRequestLine + 1);
+
+    memset(index_php, 0, LimitRequestLine + 1);
+    memset(index_html, 0, LimitRequestLine + 1);
+
+    strcpy(index_php, path);
+    strcpy(index_html, path);
+    strcat(index_php, "index.php");
+    strcat(index_html, "index.html");
+
+    if (access(index_php, F_OK) != -1 )
+    {
+        free(index_html);
+        return index_php;
+    }
+    else if (access(index_html, F_OK) != -1 )
+    {
+        free(index_php);
+        return index_html; //result = malloc(strlen(index_html) * sizeof(char))
+    }
+    else
+    {
+        free(index_php);
+        free(index_html);
+        return NULL;
+    }
 }
 
 /**
@@ -609,8 +637,30 @@ void list(const char* path)
  */
 bool load(FILE* file, BYTE** content, size_t* length)
 {
-    // TODO
-    return false;
+    *content = NULL;
+    *length = 0;
+
+    fseek(file, 0, SEEK_END);
+    *length = ftell(file);
+    rewind(file);
+
+    *content = malloc(*length + 1);
+
+    if (*content == NULL)
+    {
+        return false;
+    }
+
+    if (fread(*content, 1, *length, file) != *length)
+    {
+        free(*content);
+        *content = NULL;
+        return false;
+    }
+
+    (*content)[*length] = '\0';
+
+    return true;
 }
 
 /**
@@ -618,8 +668,10 @@ bool load(FILE* file, BYTE** content, size_t* length)
  */
 const char* lookup(const char* path)
 {
-    char dest[5];
+    char dest[512];
     int dot = 46;
+
+    memset(dest, 0, 512);
 
     for (int i = 0; path[i] != '\0'; i++)
     {
@@ -665,6 +717,13 @@ bool parse(const char* line, char* abs_path, char* query)
     char method[LimitRequestLine + 1];
     char HTTP_version[LimitRequestLine + 1];
     char request_target[LimitRequestLine + 1];
+
+    memset(method, 0, LimitRequestLine + 1);
+    memset(request_target, 0, LimitRequestLine + 1);
+    memset(HTTP_version, 0, LimitRequestLine + 1);
+    memset(abs_path, 0, LimitRequestLine + 1);
+    memset(query, 0, LimitRequestLine + 1);
+
     int finds[2], findq = 0;
     int space = 32, bslash = 47, dquotes = 34, qmark = 63;
 
@@ -680,7 +739,6 @@ bool parse(const char* line, char* abs_path, char* query)
             findq = i;
         }
     }
-
     strncpy (method, line, finds[0] - 1);
     strncpy (request_target, &line[finds[0]], finds[1] - finds[0] - 1);
     strncpy (HTTP_version, &line[finds[1]], strlen(line) - finds[1] - 2);
@@ -709,7 +767,7 @@ bool parse(const char* line, char* abs_path, char* query)
         return false;
     }
 
-    if (findq == 0)
+    if (findq == 0 || finds[1] - findq - 1 == 0)
     {
         strncpy (query, "", 1);
         strncpy (abs_path, request_target, finds[1] - finds[0] - 1);

@@ -637,28 +637,35 @@ void list(const char* path)
  */
 bool load(FILE* file, BYTE** content, size_t* length)
 {
+    char symbol;
+
     *content = NULL;
     *length = 0;
 
-    fseek(file, 0, SEEK_END);
-    *length = ftell(file);
-    rewind(file);
+    // read content
+    while ((symbol = getc(file)) != EOF)
+    {
+        *length += 1;
 
-    *content = malloc(*length + 1);
+        // append bytes to content
+        *content = realloc(*content, *length + 1);
+
+        if (*content == NULL)
+        {
+            *length = 0;
+            break;
+        }
+
+        strcat(*content, &symbol);
+
+        // null-terminate content thus far
+        *(*content + *length) = '\0';
+    }
 
     if (*content == NULL)
     {
         return false;
     }
-
-    if (fread(*content, 1, *length, file) != *length)
-    {
-        free(*content);
-        *content = NULL;
-        return false;
-    }
-
-    (*content)[*length] = '\0';
 
     return true;
 }

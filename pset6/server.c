@@ -637,15 +637,16 @@ void list(const char* path)
  */
 bool load(FILE* file, BYTE** content, size_t* length)
 {
-    char symbol;
+    char symbol[512];
+    int bytes_read;
 
     *content = NULL;
     *length = 0;
 
     // read content
-    while ((symbol = getc(file)) != EOF)
+    while ((bytes_read = fread(&symbol, 1, sizeof(symbol), file)) > 0)
     {
-        *length += 1;
+        *length += bytes_read;
 
         // append bytes to content
         *content = realloc(*content, *length + 1);
@@ -656,10 +657,9 @@ bool load(FILE* file, BYTE** content, size_t* length)
             break;
         }
 
-        strcat(*content, &symbol);
+        strncpy(*content, symbol, bytes_read);
 
-        // null-terminate content thus far
-        *(*content + *length) = '\0';
+        memset(symbol, 0, 512);
     }
 
     if (*content == NULL)

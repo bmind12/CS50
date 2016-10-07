@@ -646,19 +646,15 @@ bool load(FILE* file, BYTE** content, size_t* length)
     // read content
     while ((bytes_read = fread(&symbol, 1, sizeof(symbol), file)) > 0)
     {
-        *length += bytes_read;
-
         // append bytes to content
-        *content = realloc(*content, *length + 1);
-
+        *content = realloc(*content, *length + bytes_read + 1);
         if (*content == NULL)
         {
             *length = 0;
             break;
         }
-
-        strncpy(*content, symbol, bytes_read);
-
+        memcpy(*content + *length, symbol, bytes_read);
+        *length += bytes_read;
         memset(symbol, 0, 512);
     }
 
@@ -746,6 +742,9 @@ bool parse(const char* line, char* abs_path, char* query)
             findq = i;
         }
     }
+
+    (finds[1] - findq) == 1 ? (finds[1] = findq) : (findq = 0);
+
     strncpy (method, line, finds[0] - 1);
     strncpy (request_target, &line[finds[0]], finds[1] - finds[0] - 1);
     strncpy (HTTP_version, &line[finds[1]], strlen(line) - finds[1] - 2);
@@ -774,7 +773,7 @@ bool parse(const char* line, char* abs_path, char* query)
         return false;
     }
 
-    if (findq == 0 || finds[1] - findq - 1 == 0)
+    if (findq == 0)
     {
         strncpy (query, "", 1);
         strncpy (abs_path, request_target, finds[1] - finds[0] - 1);

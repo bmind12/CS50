@@ -739,15 +739,21 @@ bool parse(const char* line, char* abs_path, char* query)
         }
         else if (line[i - 1] == qmark)
         {
-            findq = i;
+            (line[i] != space) ? (findq = i) : (findq = -1);
         }
     }
 
-    (finds[1] - findq) == 1 ? (finds[1] = findq) : (findq = 0);
-
     strncpy (method, line, finds[0] - 1);
-    strncpy (request_target, &line[finds[0]], finds[1] - finds[0] - 1);
     strncpy (HTTP_version, &line[finds[1]], strlen(line) - finds[1] - 2);
+    if (findq != -1)
+    {
+        strncpy (request_target, &line[finds[0]], finds[1] - finds[0] - 1);
+
+    }
+    else
+    {
+        strncpy (request_target, &line[finds[0]], finds[1] - finds[0] - 2);
+    }
 
     if (strcmp(method, "GET") != 0)
     {
@@ -773,7 +779,7 @@ bool parse(const char* line, char* abs_path, char* query)
         return false;
     }
 
-    if (findq == 0)
+    if (findq <= 0)
     {
         strncpy (query, "", 1);
         strncpy (abs_path, request_target, finds[1] - finds[0] - 1);

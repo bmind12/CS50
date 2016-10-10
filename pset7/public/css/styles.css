@@ -45,3 +45,9 @@
     /* surround with whitespace */
     margin: 20px;
 }
+
+#middle td
+{
+    /* left-align tables' cells */
+    text-align: left;
+}
